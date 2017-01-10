@@ -27,7 +27,7 @@ Check the Site [Neighbourhood Map](https://sajin14.github.io/Neigbourhood-Map/)
 *This is used to fetch articles about locations.
 *Articles are appended to info window of marker
 
-##MVVVM Architecture
+##MVVM Architecture
 The java script files are seperated into three- view.js,viewModel.js and model.js
 ###viewModel.js
 * It is the engine of the app.
