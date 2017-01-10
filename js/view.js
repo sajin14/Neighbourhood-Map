@@ -161,7 +161,6 @@
        var wikiurl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + name + '&format=json&callback=wikiCallback';
        var wikiRequestTimeout = setTimeout(function() {
            article = "Failed to Load wikipedia articles";
-            $('.description').append(article);
        }, 8000);
 
        $.ajax({
