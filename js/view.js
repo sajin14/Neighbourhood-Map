@@ -16,7 +16,7 @@
            mapTypeControl: false
 
        });
-   }
+   };
 
    view.initialize = function(locations) {
        //Initialize infowindow       
@@ -66,12 +66,12 @@
            marker.addListener('click', (function(c) {
                return function() {
                    view.populateInfoWindow(this, largeInfoWindow, locations[c]);
-               }
+               };
            })(i));
 
 
 
-       };
+       }
 
        view.showlistings();
 
@@ -112,12 +112,12 @@
            if (markers[i].id == location.id)
                return markers[i];
        }
-   }
+   };
 
    //Returns infowindow
    view.getInfoWindow = function() {
        return largeInfoWindow;
-   }
+   };
 
 
 
@@ -134,9 +134,9 @@
        if (infoWindow.marker != marker) {
            infoWindow.marker = marker;
            infoWindow.setContent('');
-           var article = view.wiki(location);
+           view.wiki(location,infoWindow);
 
-           infoWindow.setContent('<div><h1>' + marker.title + '</h1></div><hr>' + '<div class= "description"></div>');
+           infoWindow.setContent('<div><h1>' + marker.title + '</h1></div><hr>');
        }
 
 
@@ -149,31 +149,32 @@
            marker.setAnimation(null);
        });
 
-   }
+   };
 
 
    //Wikipedia Api to retrieve articles about Location
-   view.wiki = function(location) {
-       var article;
-       var city = 'New Delhi';
-       var name = location.name;
+   view.wiki = function(location, infoWindow) {
+   var article;
+   var city = 'New Delhi';
+   var name = location.name;
 
-       var wikiurl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + name + '&format=json&callback=wikiCallback';
-       var wikiRequestTimeout = setTimeout(function() {
-           article = "Failed to Load wikipedia articles";
-       }, 8000);
-
-       $.ajax({
-           url: wikiurl,
-           dataType: "jsonp",
-           success: function(response) {
-               article = response[2];
-               $('.description').append(article);
+   var wikiurl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + name + '&format=json&callback=wikiCallback';
 
 
-               clearTimeout(wikiRequestTimeout);
+   $.ajax({
+      url: wikiurl,
+      dataType: "jsonp"
+   }).done(function(response) {
+      article = response[2];
+      if (article === '') {
+         article = " No Data available";
+      }
+      infoWindow.setContent('<div><h1>' + location.name + '</h1></div><hr>' + '<div class= "description">' + article + '</div>');
 
-           }
-       });
+   }).fail(function() {
+      article = "Failed to Load wikipedia articles";
+      infoWindow.setContent('<div><h1>' + location.name + '</h1></div><hr>' + '<div class= "description">' + article + '</div>');
 
-   }
+   });
+
+};
